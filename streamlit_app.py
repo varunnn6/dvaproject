@@ -51,7 +51,7 @@ def load_data(file_url=None, uploaded_file=None):
     return df
 
 # GitHub raw CSV URL (replace with your actual GitHub raw URL)
-github_csv_url = "https://raw.githubusercontent.com/your-username/your-repo/main/smartphone_sales2.csv"
+github_csv_url = "https://raw.githubusercontent.com/your-username/dvaproject/main/smartphone_sales2.csv"
 
 # File uploader as fallback
 uploaded_file = st.sidebar.file_uploader("Upload CSV file (optional)", type=["csv"])
@@ -138,7 +138,7 @@ def render_chart(chart_type, selected_brand, selected_model, fig=None, ax=None, 
                     ax.plot(line_df.index, line_df.values, label=brand, color=color_map.get(brand, 'gray'))
                 ax.set_title("Total Sales Trends by Brand")
                 ax.legend()
-            ax.set_ylabel("Units Sold (Units)")
+            ax.set_ylabel("Units Sold (Millions)")
         else:
             grouped = df[df['Brand'] == selected_brand].groupby('Year')['Units Sold (Millions)'].sum()
             if chart_type == 'Bar Chart':
@@ -149,14 +149,14 @@ def render_chart(chart_type, selected_brand, selected_model, fig=None, ax=None, 
                 ax.set_title(f"{selected_brand} Sales Over the Years")
             elif chart_type == 'Line Chart':
                 grouped.plot(kind='line', ax=ax, marker='o', color=color_map.get(selected_brand, 'gray'))
-                for x in ax.zip(grouped.index, grouped.values):
+                for x, y in zip(grouped.index, grouped.values):
                     ax.text(x, y, f'{y:.1f}', ha='center', va='bottom', fontsize=8)
                 ax.set_title(f"{selected_brand} Sales Over the Years")
             elif chart_type == 'Pie Chart':
-                ax.text(0.5, 0.5, f"{Pie chart not applicable for single brand}", ha='center', va='center', fontsize=14)
+                ax.text(0.5, 0.5, "Pie chart not applicable for single brand", ha='center', va='center', fontsize=14)
                 ax.axis('off')
             ax.set_xlabel("Year")
-            ax.set_ylabel("Units Sold (Units)")
+            ax.set_ylabel("Units Sold (Millions)")
     return fig
 
 # Main content
