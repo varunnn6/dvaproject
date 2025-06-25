@@ -1,0 +1,528 @@
+Year,Brand,Model,Units Sold (Millions)
+2020,Xiaomi,Mi 10,25
+2020,Xiaomi,Mi 10 Pro,20
+2020,Xiaomi,Redmi Note 9,20
+2020,Xiaomi,Redmi Note 9 Pro,15
+2020,Xiaomi,Redmi 9,15
+2020,Xiaomi,Redmi 9A,10
+2020,Xiaomi,POCO X2,10
+2020,Xiaomi,POCO M2,8
+2020,Xiaomi,Black Shark 3,5
+2020,Xiaomi,Mi Note 10 Lite,10
+2020,Xiaomi,Redmi K30,10
+2021,Xiaomi,Mi 10,17.5
+2021,Xiaomi,Mi 10 Pro,14
+2021,Xiaomi,Redmi Note 9,14
+2021,Xiaomi,Redmi Note 9 Pro,10.5
+2021,Xiaomi,Redmi 9,10.5
+2021,Xiaomi,Redmi 9A,7
+2021,Xiaomi,POCO X2,7
+2021,Xiaomi,POCO M2,5.6
+2021,Xiaomi,Black Shark 3,3.5
+2021,Xiaomi,Mi Note 10 Lite,7
+2021,Xiaomi,Redmi K30,7
+2021,Xiaomi,Mi 11,30
+2021,Xiaomi,Mi 11 Pro,20
+2021,Xiaomi,Redmi Note 10,20
+2021,Xiaomi,Redmi Note 10 Pro,15
+2021,Xiaomi,Redmi 9T,15
+2021,Xiaomi,Redmi 10,10
+2021,Xiaomi,POCO X3 Pro,10
+2021,Xiaomi,POCO F3,10
+2021,Xiaomi,Black Shark 4,6
+2021,Xiaomi,Mi 11 Lite,15
+2021,Xiaomi,Redmi Note 10S,10
+2021,Xiaomi,Redmi K40,10
+2022,Xiaomi,Mi 10,12.5
+2022,Xiaomi,Mi 10 Pro,10
+2022,Xiaomi,Redmi Note 9,10
+2022,Xiaomi,Redmi Note 9 Pro,7.5
+2022,Xiaomi,Redmi 9,7.5
+2022,Xiaomi,Redmi 9A,5
+2022,Xiaomi,POCO X2,5
+2022,Xiaomi,POCO M2,4
+2022,Xiaomi,Mi 11,21
+2022,Xiaomi,Mi 11 Pro,14
+2022,Xiaomi,Redmi Note 10,14
+2022,Xiaomi,Redmi Note 10 Pro,10.5
+2022,Xiaomi,Redmi 9T,10.5
+2022,Xiaomi,Redmi 10,7
+2022,Xiaomi,POCO X3 Pro,7
+2022,Xiaomi,POCO F3,7
+2022,Xiaomi,Black Shark 4,4.2
+2022,Xiaomi,Mi 11 Lite,10.5
+2022,Xiaomi,Redmi Note 10S,7
+2022,Xiaomi,Redmi K40,7
+2022,Xiaomi,Mi 12,25
+2022,Xiaomi,Mi 12 Pro,20
+2022,Xiaomi,Redmi Note 11,20
+2022,Xiaomi,Redmi Note 11S,15
+2022,Xiaomi,Redmi 10A,10
+2022,Xiaomi,POCO F4,10
+2022,Xiaomi,POCO X4 Pro,10
+2022,Xiaomi,Black Shark 5,5
+2022,Xiaomi,12 Lite,10
+2022,Xiaomi,Redmi K50,10
+2022,Xiaomi,Redmi Note 11T,10
+2023,Xiaomi,Mi 11,15
+2023,Xiaomi,Redmi Note 10,10
+2023,Xiaomi,Mi 12,17.5
+2023,Xiaomi,Mi 12 Pro,14
+2023,Xiaomi,Redmi Note 11,14
+2023,Xiaomi,Redmi Note 11S,10.5
+2023,Xiaomi,Redmi 10A,7
+2023,Xiaomi,POCO F4,7
+2023,Xiaomi,POCO X4 Pro,7
+2023,Xiaomi,12 Lite,7
+2023,Xiaomi,Redmi K50,7
+2023,Xiaomi,Redmi Note 11T,7
+2023,Xiaomi,Redmi Note 12,25
+2023,Xiaomi,Redmi Note 12 Pro,20
+2023,Xiaomi,Xiaomi 13,20
+2023,Xiaomi,Xiaomi 13 Pro,15
+2023,Xiaomi,Redmi 12,15
+2023,Xiaomi,Redmi 12C,10
+2023,Xiaomi,POCO X5 Pro,10
+2023,Xiaomi,POCO C55,10
+2023,Xiaomi,13 Lite,15
+2023,Xiaomi,Redmi Note 12S,10
+2024,Xiaomi,Mi 12,12.5
+2024,Xiaomi,Redmi Note 11,10
+2024,Xiaomi,Redmi Note 12,17.5
+2024,Xiaomi,Redmi Note 12 Pro,14
+2024,Xiaomi,Xiaomi 13,14
+2024,Xiaomi,Xiaomi 13 Pro,10.5
+2024,Xiaomi,Redmi 12,10.5
+2024,Xiaomi,Redmi 12C,7
+2024,Xiaomi,POCO X5 Pro,7
+2024,Xiaomi,POCO C55,7
+2024,Xiaomi,13 Lite,10.5
+2024,Xiaomi,Redmi Note 12S,7
+2024,Xiaomi,Xiaomi 14,30
+2024,Xiaomi,Xiaomi 14 Pro,25
+2024,Xiaomi,Redmi Note 13,20
+2024,Xiaomi,Redmi Note 13 Pro,15
+2024,Xiaomi,Redmi 13,15
+2024,Xiaomi,Redmi 13C,10
+2024,Xiaomi,POCO X6 Pro,10
+2024,Xiaomi,POCO M6,10
+2024,Xiaomi,14 Lite,15
+2024,Xiaomi,Redmi K70,10
+2024,Xiaomi,Redmi Note 13R,10
+2020,Samsung,Galaxy S20,30
+2020,Samsung,Galaxy S20+,25
+2020,Samsung,Galaxy S20 Ultra,20
+2020,Samsung,Galaxy Note 20,20
+2020,Samsung,Galaxy Note 20 Ultra,15
+2020,Samsung,Galaxy A51,25
+2020,Samsung,Galaxy A71,20
+2020,Samsung,Galaxy A21s,15
+2020,Samsung,Galaxy A11,15
+2020,Samsung,Galaxy M31,15
+2020,Samsung,Galaxy Z Fold 2,10
+2020,Samsung,Galaxy Z Flip,12
+2020,Samsung,Galaxy A41,10
+2020,Samsung,Galaxy M21,10
+2020,Samsung,Galaxy A31,10
+2021,Samsung,Galaxy S20,21
+2021,Samsung,Galaxy S20+,17.5
+2021,Samsung,Galaxy S20 Ultra,14
+2021,Samsung,Galaxy Note 20,14
+2021,Samsung,Galaxy Note 20 Ultra,10.5
+2021,Samsung,Galaxy A51,17.5
+2021,Samsung,Galaxy A71,14
+2021,Samsung,Galaxy A21s,10.5
+2021,Samsung,Galaxy A11,10.5
+2021,Samsung,Galaxy M31,10.5
+2021,Samsung,Galaxy Z Fold 2,7
+2021,Samsung,Galaxy Z Flip,8.4
+2021,Samsung,Galaxy A41,7
+2021,Samsung,Galaxy M21,7
+2021,Samsung,Galaxy A31,7
+2021,Samsung,Galaxy S21,30
+2021,Samsung,Galaxy S21+,25
+2021,Samsung,Galaxy S21 Ultra,20
+2021,Samsung,Galaxy A52,20
+2021,Samsung,Galaxy A72,15
+2021,Samsung,Galaxy A32,15
+2021,Samsung,Galaxy M62,15
+2021,Samsung,Galaxy Z Fold 3,15
+2021,Samsung,Galaxy Z Flip 3,12
+2021,Samsung,Galaxy A22,15
+2021,Samsung,Galaxy M32,15
+2021,Samsung,Galaxy A12,15
+2021,Samsung,Galaxy F52,10
+2021,Samsung,Galaxy M12,10
+2021,Samsung,Galaxy A82,10
+2022,Samsung,Galaxy S20,15
+2022,Samsung,Galaxy S20+,12.5
+2022,Samsung,Galaxy S20 Ultra,10
+2022,Samsung,Galaxy Note 20,10
+2022,Samsung,Galaxy Note 20 Ultra,7.5
+2022,Samsung,Galaxy A51,12.5
+2022,Samsung,Galaxy A71,10
+2022,Samsung,Galaxy A21s,7.5
+2022,Samsung,Galaxy A11,7.5
+2022,Samsung,Galaxy M31,7.5
+2022,Samsung,Galaxy Z Fold 2,5
+2022,Samsung,Galaxy Z Flip,6
+2022,Samsung,Galaxy S21,21
+2022,Samsung,Galaxy S21+,17.5
+2022,Samsung,Galaxy S21 Ultra,14
+2022,Samsung,Galaxy A52,14
+2022,Samsung,Galaxy A72,10.5
+2022,Samsung,Galaxy A32,10.5
+2022,Samsung,Galaxy M62,10.5
+2022,Samsung,Galaxy Z Fold 3,10.5
+2022,Samsung,Galaxy Z Flip 3,8.4
+2022,Samsung,Galaxy A22,10.5
+2022,Samsung,Galaxy M32,10.5
+2022,Samsung,Galaxy A12,10.5
+2022,Samsung,Galaxy F52,7
+2022,Samsung,Galaxy M12,7
+2022,Samsung,Galaxy A82,7
+2022,Samsung,Galaxy S22,30
+2022,Samsung,Galaxy S22+,25
+2022,Samsung,Galaxy S22 Ultra,20
+2022,Samsung,Galaxy A53,20
+2022,Samsung,Galaxy A33,15
+2022,Samsung,Galaxy A13,15
+2022,Samsung,Galaxy M33,15
+2022,Samsung,Galaxy Z Fold 4,15
+2022,Samsung,Galaxy Z Flip 4,12
+2022,Samsung,Galaxy A23,15
+2022,Samsung,Galaxy M53,15
+2022,Samsung,Galaxy A73,15
+2022,Samsung,Galaxy F23,10
+2022,Samsung,Galaxy M23,10
+2023,Samsung,Galaxy S21,15
+2023,Samsung,Galaxy A52,10
+2023,Samsung,Galaxy S22,21
+2023,Samsung,Galaxy S22+,17.5
+2023,Samsung,Galaxy S22 Ultra,14
+2023,Samsung,Galaxy A53,14
+2023,Samsung,Galaxy A33,10.5
+2023,Samsung,Galaxy A13,10.5
+2023,Samsung,Galaxy M33,10.5
+2023,Samsung,Galaxy Z Fold 3,7.5
+2023,Samsung,Galaxy Z Flip 3,6
+2023,Samsung,Galaxy A22,7.5
+2023,Samsung,Galaxy M32,7.5
+2023,Samsung,Galaxy A12,7.5
+2023,Samsung,Galaxy S23,30
+2023,Samsung,Galaxy S23+,25
+2023,Samsung,Galaxy S23 Ultra,20
+2023,Samsung,Galaxy A54,20
+2023,Samsung,Galaxy A34,15
+2023,Samsung,Galaxy A14,15
+2023,Samsung,Galaxy M54,15
+2023,Samsung,Galaxy Z Fold 5,15
+2023,Samsung,Galaxy Z Flip 5,12
+2023,Samsung,Galaxy A24,15
+2023,Samsung,Galaxy M34,15
+2023,Samsung,Galaxy F54,15
+2024,Samsung,Galaxy S22,15
+2024,Samsung,Galaxy A53,10
+2024,Samsung,Galaxy S23,21
+2024,Samsung,Galaxy S23+,17.5
+2024,Samsung,Galaxy S23 Ultra,14
+2024,Samsung,Galaxy A54,14
+2024,Samsung,Galaxy A34,10.5
+2024,Samsung,Galaxy A14,10.5
+2024,Samsung,Galaxy M54,10.5
+2024,Samsung,Galaxy Z Fold 4,10.5
+2024,Samsung,Galaxy Z Flip 4,8.4
+2024,Samsung,Galaxy A23,10.5
+2024,Samsung,Galaxy M53,10.5
+2024,Samsung,Galaxy A73,10.5
+2024,Samsung,Galaxy S24,30
+2024,Samsung,Galaxy S24+,25
+2024,Samsung,Galaxy S24 Ultra,20
+2024,Samsung,Galaxy A55,20
+2024,Samsung,Galaxy A35,15
+2024,Samsung,Galaxy A15,15
+2024,Samsung,Galaxy M55,15
+2024,Samsung,Galaxy Z Fold 6,15
+2024,Samsung,Galaxy Z Flip 6,12
+2024,Samsung,Galaxy A25,15
+2024,Samsung,Galaxy M35,15
+2024,Samsung,Galaxy F55,15
+2024,Samsung,Galaxy A05,15
+2020,Apple,iPhone 12,50
+2020,Apple,iPhone 12 Mini,20
+2020,Apple,iPhone 12 Pro,40
+2020,Apple,iPhone 12 Pro Max,35
+2020,Apple,iPhone SE (2020),30
+2020,Apple,iPhone 11,29
+2021,Apple,iPhone 12,35
+2021,Apple,iPhone 12 Mini,14
+2021,Apple,iPhone 12 Pro,28
+2021,Apple,iPhone 12 Pro Max,24.5
+2021,Apple,iPhone SE (2020),21
+2021,Apple,iPhone 11,20
+2021,Apple,iPhone 13,60
+2021,Apple,iPhone 13 Mini,25
+2021,Apple,iPhone 13 Pro,40
+2021,Apple,iPhone 13 Pro Max,35
+2022,Apple,iPhone 12,20
+2022,Apple,iPhone 12 Mini,10
+2022,Apple,iPhone 12 Pro,16
+2022,Apple,iPhone 12 Pro Max,14
+2022,Apple,iPhone SE (2020),15
+2022,Apple,iPhone 11,14
+2022,Apple,iPhone 13,42
+2022,Apple,iPhone 13 Mini,17.5
+2022,Apple,iPhone 13 Pro,28
+2022,Apple,iPhone 13 Pro Max,24.5
+2022,Apple,iPhone 14,50
+2022,Apple,iPhone 14 Plus,30
+2022,Apple,iPhone 14 Pro,40
+2022,Apple,iPhone 14 Pro Max,36
+2023,Apple,iPhone 12,10
+2023,Apple,iPhone 13,30
+2023,Apple,iPhone 13 Mini,12
+2023,Apple,iPhone 13 Pro,20
+2023,Apple,iPhone 13 Pro Max,17.5
+2023,Apple,iPhone 14,35
+2023,Apple,iPhone 14 Plus,21
+2023,Apple,iPhone 14 Pro,28
+2023,Apple,iPhone 14 Pro Max,25
+2023,Apple,iPhone 15,50
+2023,Apple,iPhone 15 Plus,30
+2023,Apple,iPhone 15 Pro,40
+2023,Apple,iPhone 15 Pro Max,34
+2024,Apple,iPhone 13,21
+2024,Apple,iPhone 13 Pro,14
+2024,Apple,iPhone 13 Pro Max,12
+2024,Apple,iPhone 14,25
+2024,Apple,iPhone 14 Plus,15
+2024,Apple,iPhone 14 Pro,20
+2024,Apple,iPhone 14 Pro Max,18
+2024,Apple,iPhone 15,35
+2024,Apple,iPhone 15 Plus,21
+2024,Apple,iPhone 15 Pro,28
+2024,Apple,iPhone 15 Pro Max,24
+2024,Apple,iPhone 16,50
+2024,Apple,iPhone 16 Plus,30
+2024,Apple,iPhone 16 Pro,40
+2024,Apple,iPhone 16 Pro Max,35
+2020,Realme,Realme 6,8
+2020,Realme,Realme 6i,6
+2020,Realme,Realme Narzo 10,5
+2020,Realme,Realme C3,5
+2020,Realme,Realme X3,5
+2020,Realme,Realme C11,5
+2020,Realme,Realme X50,5
+2021,Realme,Realme 6,5.6
+2021,Realme,Realme 6i,4.2
+2021,Realme,Realme Narzo 10,3.5
+2021,Realme,Realme C3,3.5
+2021,Realme,Realme X3,3.5
+2021,Realme,Realme C11,3.5
+2021,Realme,Realme X50,3.5
+2021,Realme,Realme 8,10
+2021,Realme,Realme 8 Pro,8
+2021,Realme,Narzo 30,8
+2021,Realme,C25,8
+2021,Realme,GT 5G,8
+2021,Realme,C21,8
+2021,Realme,X7,8
+2022,Realme,Realme 6,4
+2022,Realme,Realme 8,7
+2022,Realme,Realme 8 Pro,5.6
+2022,Realme,Narzo 30,5.6
+2022,Realme,C25,5.6
+2022,Realme,GT 5G,5.6
+2022,Realme,C21,5.6
+2022,Realme,X7,5.6
+2022,Realme,Realme GT 2,8
+2022,Realme,Realme 9,6
+2022,Realme,Realme 9 Pro,5
+2022,Realme,Narzo 50,5
+2022,Realme,C35,5
+2022,Realme,C31,6
+2023,Realme,Realme 8,5
+2023,Realme,Realme 9,4.2
+2023,Realme,Realme 9 Pro,3.5
+2023,Realme,Narzo 50,3.5
+2023,Realme,C35,3.5
+2023,Realme,Realme 11 Pro,8
+2023,Realme,Realme 11,6
+2023,Realme,Realme C55,6
+2023,Realme,Narzo 60,5
+2023,Realme,11x,5
+2023,Realme,C53,5
+2024,Realme,Realme 11,4
+2024,Realme,Realme 12,8
+2024,Realme,12 Pro,6
+2024,Realme,C65,6
+2024,Realme,Narzo 70,5
+2024,Realme,12x,5
+2024,Realme,C63,5
+2020,Huawei,P40,30
+2020,Huawei,P40 Pro,25
+2020,Huawei,P40 Lite,20
+2020,Huawei,Mate 30 Pro,20
+2020,Huawei,Nova 7,15
+2020,Huawei,Nova 7i,15
+2020,Huawei,Y7p,13
+2020,Huawei,P Smart 2020,10
+2020,Huawei,Y6p,10
+2020,Huawei,Nova 6,10
+2021,Huawei,P40,21
+2021,Huawei,P40 Pro,17.5
+2021,Huawei,P40 Lite,14
+2021,Huawei,Mate 30 Pro,14
+2021,Huawei,Nova 7,10.5
+2021,Huawei,Nova 7i,10.5
+2021,Huawei,Y7p,9.1
+2021,Huawei,P Smart 2020,7
+2021,Huawei,Y6p,7
+2021,Huawei,Nova 6,7
+2021,Huawei,P50,10
+2021,Huawei,P50 Pro,8
+2021,Huawei,Nova 8,6
+2021,Huawei,Mate 40 Pro,6
+2021,Huawei,Nova 8i,5
+2021,Huawei,P Smart 2021,5
+2022,Huawei,P40,15
+2022,Huawei,P40 Pro,12.5
+2022,Huawei,P40 Lite,10
+2022,Huawei,Mate 30 Pro,10
+2022,Huawei,Nova 7,7.5
+2022,Huawei,P50,7
+2022,Huawei,P50 Pro,5.6
+2022,Huawei,Nova 8,4.2
+2022,Huawei,Mate 40 Pro,4.2
+2022,Huawei,Nova 8i,3.5
+2022,Huawei,Nova 9,8
+2022,Huawei,Mate 50,6
+2022,Huawei,Mate 50 Pro,5
+2022,Huawei,Nova Y70,5
+2022,Huawei,P50 Pocket,4
+2023,Huawei,P50,5
+2023,Huawei,Nova 8,3
+2023,Huawei,Mate 40 Pro,3
+2023,Huawei,Nova 9,5.6
+2023,Huawei,Mate 50,4
+2023,Huawei,Mate 50 Pro,3.5
+2023,Huawei,P60 Pro,8
+2023,Huawei,Nova 11,6
+2023,Huawei,Mate X3,5
+2023,Huawei,Nova Y91,6
+2024,Huawei,Mate 50,3
+2024,Huawei,P60 Pro,5.6
+2024,Huawei,Nova 11,4.2
+2024,Huawei,Mate 60,10
+2024,Huawei,Mate 60 Pro,8
+2024,Huawei,Nova 12,8
+2024,Huawei,Pura 70,7
+2024,Huawei,Pura 70 Pro,5
+2024,Huawei,Nova 12i,5
+2024,Huawei,P Smart 2024,5
+2020,Oppo,Reno 3,20
+2020,Oppo,Reno 3 Pro,15
+2020,Oppo,Find X2,15
+2020,Oppo,Find X2 Pro,10
+2020,Oppo,A91,10
+2020,Oppo,A52,10
+2020,Oppo,A12,10
+2020,Oppo,A72,15
+2021,Oppo,Reno 3,14
+2021,Oppo,Reno 3 Pro,10.5
+2021,Oppo,Find X2,10.5
+2021,Oppo,Find X2 Pro,7
+2021,Oppo,A91,7
+2021,Oppo,A52,7
+2021,Oppo,A12,7
+2021,Oppo,A72,10.5
+2021,Oppo,Find X3,20
+2021,Oppo,Find X3 Pro,15
+2021,Oppo,Reno 5,15
+2021,Oppo,Reno 5 Pro,10
+2021,Oppo,A54,10
+2021,Oppo,A74,10
+2021,Oppo,A94,10
+2021,Oppo,F19,10
+2021,Oppo,A16,10
+2021,Oppo,Reno 6,10
+2022,Oppo,Find X2,7.5
+2022,Oppo,Find X2 Pro,5
+2022,Oppo,Find X3,14
+2022,Oppo,Find X3 Pro,10.5
+2022,Oppo,Reno 5,10.5
+2022,Oppo,Reno 5 Pro,7
+2022,Oppo,A54,7
+2022,Oppo,A74,7
+2022,Oppo,A94,7
+2022,Oppo,F19,7
+2022,Oppo,A16,7
+2022,Oppo,Reno 6,7
+2022,Oppo,Find X5,15
+2022,Oppo,Find X5 Pro,10
+2022,Oppo,Reno 7,15
+2022,Oppo,Reno 7 Pro,10
+2022,Oppo,A76,10
+2022,Oppo,A96,10
+2022,Oppo,A57,10
+2022,Oppo,Reno 8,10
+2022,Oppo,F21 Pro,10
+2023,Oppo,Find X3,10
+2023,Oppo,Find X5,10.5
+2023,Oppo,Find X5 Pro,7
+2023,Oppo,Reno 5,7.5
+2023,Oppo,Reno 7,10.5
+2023,Oppo,Reno 7 Pro,7
+2023,Oppo,A76,7
+2023,Oppo,A96,7
+2023,Oppo,Reno 8,7
+2023,Oppo,F21 Pro,7
+2023,Oppo,Reno 10,20
+2023,Oppo,Reno 10 Pro,15
+2023,Oppo,Find N2,10
+2023,Oppo,A78,10
+2023,Oppo,A58,10
+2023,Oppo,A38,10
+2023,Oppo,Reno 8T,10
+2023,Oppo,F23,10
+2023,Oppo,A1,10
+2024,Oppo,Reno 7,7.5
+2024,Oppo,Reno 10,14
+2024,Oppo,Reno 10 Pro,10.5
+2024,Oppo,Find N2,7
+2024,Oppo,A78,7
+2024,Oppo,A58,7
+2024,Oppo,A38,7
+2024,Oppo,Reno 8T,7
+2024,Oppo,F23,7
+2024,Oppo,Reno 11,8
+2024,Oppo,Reno 11 Pro,5
+2024,Oppo,Find X7,5
+2024,Oppo,A60,5
+2024,Oppo,A80,5
+2024,Oppo,A3,5
+2024,Oppo,Reno 12,5
+2020,Sony,Xperia 1 II,2
+2020,Sony,Xperia 10 II,1
+2021,Sony,Xperia 1 II,1.4
+2021,Sony,Xperia 10 II,0.7
+2021,Sony,Xperia 5 III,1
+2021,Sony,Xperia 10 III,1
+2022,Sony,Xperia 1 II,1
+2022,Sony,Xperia 10 II,0.5
+2022,Sony,Xperia 5 III,0.7
+2022,Sony,Xperia 10 III,0.7
+2022,Sony,Xperia 1 IV,2
+2022,Sony,Xperia 10 IV,1
+2023,Sony,Xperia 5 III,0.5
+2023,Sony,Xperia 10 III,0.5
+2023,Sony,Xperia 1 IV,1.4
+2023,Sony,Xperia 10 IV,0.7
+2023,Sony,Xperia 5 V,2
+2023,Sony,Xperia 10 V,2
+2024,Sony,Xperia 1 IV,1
+2024,Sony,Xperia 10 IV,0.5
+2024,Sony,Xperia 5 V,1.4
+2024,Sony,Xperia 10 V,1.4
+2024,Sony,Xperia 1 VI,2
+2024,Sony,Xperia 10 VI,1
