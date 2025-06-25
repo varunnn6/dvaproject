@@ -51,7 +51,7 @@ def load_data(file_url=None, uploaded_file=None):
     return df
 
 # GitHub raw CSV URL (replace with your actual GitHub raw URL)
-github_csv_url = "https://raw.githubusercontent.com/your-username/dvaproject/main/smartphone_sales2.csv"
+github_csv_url = "https://raw.githubusercontent.com/varunnn6/dvaproject/main/smartphone_sales2.csv"
 
 # File uploader as fallback
 uploaded_file = st.sidebar.file_uploader("Upload CSV file (optional)", type=["csv"])
