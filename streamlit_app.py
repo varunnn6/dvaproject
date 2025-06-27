@@ -165,10 +165,9 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                         ax.set_xlabel("Model")
                     elif chart_type == 'Pie Chart':
                         grouped = grouped.sort_values(ascending=False)
-                        # Ensure colors match the number of wedges
-                        wedge_colors = [color_map.get(selected_brand, 'gray')] * len(grouped)
-                        wedges, texts, autotexts = ax.pie(grouped, labels=None, colors=wedge_colors, startangle=90)
-                        for i, (wedge, autotext) in enumerate(zip(wedges, autotexts)):
+                        # Use pie without autopct, unpack only wedges and texts
+                        wedges, texts = ax.pie(grouped, labels=None, colors=[color_map.get(selected_brand, 'gray')] * len(grouped), startangle=90)
+                        for i, (wedge, text) in enumerate(zip(wedges, texts)):
                             # Get the angle of the wedge's midpoint
                             angle = (wedge.theta2 + wedge.theta1) / 2
                             # Normalize to 0-360 degrees
