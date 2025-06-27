@@ -39,42 +39,35 @@ def load_data(file_url=None, uploaded_file=None):
         st.error(f"Error loading file: {e}")
         return None
 
-    # Validate required columns
     required_columns = {'Year', 'Brand', 'Model', 'Units Sold (Millions)'}
     if not required_columns.issubset(df.columns):
         st.error(f"Missing required columns. Found: {list(df.columns)}")
         return None
 
-    # Clean data
     df['Year'] = df['Year'].astype(int)
     df['Model'] = df['Model'].fillna('Unknown')
     df['Units Sold (Millions)'] = pd.to_numeric(df['Units Sold (Millions)'], errors='coerce').fillna(0)
     return df
 
-# GitHub raw CSV URL (replace with your actual GitHub raw URL)
+# CSV source
 github_csv_url = "https://raw.githubusercontent.com/varunnn6/dvaproject/main/smartphone_sales2.csv"
 
-# File uploader as fallback
 uploaded_file = st.sidebar.file_uploader("Upload CSV file (optional)", type=["csv"])
 
-# Load data
 df = load_data(file_url=github_csv_url, uploaded_file=uploaded_file)
 if df is None:
     st.stop()
 
-# Sidebar for user inputs
 st.sidebar.header("Smartphone Sales Visualizer 📱")
 brands = sorted(df['Brand'].unique().tolist() + ['All'])
 selected_brand = st.sidebar.selectbox("Select Brand", brands, index=brands.index('All'))
 
-# Update model options based on selected brand
 if selected_brand == 'All':
     models = ['None']
 else:
     models = sorted(['All', 'None'] + df[df['Brand'] == selected_brand]['Model'].unique().tolist())
 selected_model = st.sidebar.selectbox("Select Model", models, index=0)
 
-# Year range selection
 min_year = int(df['Year'].min())
 max_year = int(df['Year'].max())
 year_range = st.sidebar.slider("Select Year Range", min_year, max_year, (min_year, max_year))
@@ -82,20 +75,15 @@ year_range = st.sidebar.slider("Select Year Range", min_year, max_year, (min_yea
 chart_types = ['Bar Chart', 'Pie Chart', 'Line Chart', 'Heatmap']
 selected_chart = st.sidebar.selectbox("Select Chart Type", chart_types)
 
-# Comparison charts
 st.sidebar.subheader("Compare Charts")
 compare_charts = st.sidebar.multiselect("Select Charts to Compare", chart_types)
 compare_button = st.sidebar.button("Compare Charts")
 
-# Show stats button
 show_stats = st.sidebar.button("Show Stats")
 
-# Function to render charts
 def render_chart(chart_type, selected_brand, selected_model, year_range, fig=None, ax=None, is_comparison=False):
     if ax is None:
         ax = plt.gca()
-
-    # Filter data by year range
     filtered_df = df[(df['Year'] >= year_range[0]) & (df['Year'] <= year_range[1])]
 
     if chart_type == 'Heatmap':
@@ -104,7 +92,6 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
         ax.set_title("Heatmap: Smartphone Sales")
     else:
         if selected_model and selected_model not in ['None', 'All'] and selected_brand != 'All':
-            # Single model for a specific brand
             filtered_df = filtered_df[(filtered_df['Brand'] == selected_brand) & (filtered_df['Model'] == selected_model)]
             if not filtered_df.empty:
                 data = filtered_df['Units Sold (Millions)']
@@ -112,7 +99,7 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                 if chart_type == 'Bar Chart':
                     bars = ax.bar(years, data, color=color_map.get(selected_brand, 'gray'))
                     for bar in bars:
-                        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), f'{bar.get_height():.1f}', 
+                        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), f'{bar.get_height():.1f}',
                                 ha='center', va='bottom', fontsize=8)
                     ax.set_title(f"{selected_brand} {selected_model} Sales ({year_range[0]}-{year_range[1]})")
                 elif chart_type == 'Line Chart':
@@ -129,12 +116,11 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                 ax.text(0.5, 0.5, "No data for selected model in selected year range", ha='center', va='center', fontsize=14)
                 ax.axis('off')
         elif selected_brand == 'All':
-            # All brands
             grouped = filtered_df.groupby(['Brand'])['Units Sold (Millions)'].sum().reindex(color_map.keys(), fill_value=0)
             if chart_type == 'Bar Chart':
                 bars = grouped.plot(kind='bar', ax=ax, color=[color_map.get(b, 'gray') for b in grouped.index])
                 for bar in ax.patches:
-                    ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), f'{bar.get_height():.1f}', 
+                    ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), f'{bar.get_height():.1f}',
                             ha='center', va='bottom', fontsize=8)
                 ax.set_title(f"Total Smartphone Sales by Brand ({year_range[0]}-{year_range[1]})")
             elif chart_type == 'Pie Chart':
@@ -151,7 +137,6 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                 ax.legend()
             ax.set_ylabel("Units Sold (Millions)")
         else:
-            # Single brand, all models
             filtered_df = filtered_df[filtered_df['Brand'] == selected_brand]
             if selected_model == 'All':
                 grouped = filtered_df.groupby(['Model'])['Units Sold (Millions)'].sum()
@@ -159,54 +144,42 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                     if chart_type == 'Bar Chart':
                         bars = grouped.plot(kind='bar', ax=ax, color=color_map.get(selected_brand, 'gray'))
                         for bar in ax.patches:
-                            ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), f'{bar.get_height():.1f}', 
+                            ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), f'{bar.get_height():.1f}',
                                     ha='center', va='bottom', fontsize=8)
                         ax.set_title(f"{selected_brand} Sales by Model ({year_range[0]}-{year_range[1]})")
                         ax.set_xlabel("Model")
                     elif chart_type == 'Pie Chart':
                         grouped = grouped.sort_values(ascending=False)
-                        # Use pie without autopct, unpack only wedges and texts
-                        wedges, texts = ax.pie(grouped, labels=None, colors=[color_map.get(selected_brand, 'gray')] * len(grouped), startangle=90)
-                        for i, (wedge, text) in enumerate(zip(wedges, texts)):
-                            # Get the angle of the wedge's midpoint
-                            angle = (wedge.theta2 + wedge.theta1) / 2
-                            # Normalize to 0-360 degrees
-                            angle = angle % 360
-                            # Determine text orientation
-                            if 45 <= angle < 135 or 225 <= angle < 315:  # Top and bottom (vertical)
-                                ha = 'center'
-                                va = 'center' if 45 <= angle < 135 else 'center'
-                                rotation = 90 if 45 <= angle < 135 else -90
-                            else:  # Left and right (horizontal)
-                                ha = 'left' if 0 <= angle < 180 else 'right'
-                                va = 'center'
-                                rotation = 0
-                            # Calculate position from center outward
-                            radius = wedge.r
-                            text_x = wedge.center[0] + radius * 0.3 * np.cos(np.radians(angle - 90))
-                            text_y = wedge.center[1] + radius * 0.3 * np.sin(np.radians(angle - 90))
-                            ax.text(text_x, text_y, f'{grouped.iloc[i]:.1f}', ha=ha, va=va, rotation=rotation, fontsize=8)
-                        # Move labels outward with hyphens
-                        for i, (wedge, label) in enumerate(zip(wedges, grouped.index)):
-                            angle = (wedge.theta2 + wedge.theta1) / 2
-                            angle = angle % 360
-                            radius = wedge.r
-                            label_x = wedge.center[0] + radius * 1.2 * np.cos(np.radians(angle - 90))
-                            label_y = wedge.center[1] + radius * 1.2 * np.sin(np.radians(angle - 90))
-                            if 45 <= angle < 135 or 225 <= angle < 315:  # Vertical
-                                ha = 'center'
-                                va = 'bottom' if 45 <= angle < 135 else 'top'
-                                rotation = 90 if 45 <= angle < 135 else -90
-                            else:  # Horizontal
-                                ha = 'left' if 0 <= angle < 180 else 'right'
-                                va = 'center'
-                                rotation = 0
-                            ax.text(label_x, label_y, f'{label}', ha=ha, va=va, rotation=rotation, fontsize=8)
-                            # Add hyphen connector
-                            mid_x = wedge.center[0] + radius * 0.6 * np.cos(np.radians(angle - 90))
-                            mid_y = wedge.center[1] + radius * 0.6 * np.sin(np.radians(angle - 90))
-                            ax.plot([mid_x, label_x], [mid_y, label_y], color='gray', linestyle='-', linewidth=0.5)
+                        values = grouped.values
+                        labels = grouped.index
+                        colors = plt.cm.tab20.colors  # more distinct colors
+
+                        wedges, texts, autotexts = ax.pie(
+                            values,
+                            colors=colors[:len(values)],
+                            startangle=90,
+                            wedgeprops=dict(width=0.4, edgecolor='w'),
+                            autopct=None
+                        )
+
+                        for i, wedge in enumerate(wedges):
+                            ang = (wedge.theta2 + wedge.theta1)/2.
+                            x = np.cos(np.deg2rad(ang))
+                            y = np.sin(np.deg2rad(ang))
+                            horizontalalignment = 'left' if x > 0 else 'right'
+                            connectionstyle="angle,angleA=0,angleB={}".format(ang)
+                            ax.annotate(
+                                f"{labels[i]}: {values[i]:.1f}",
+                                xy=(x * 0.7, y * 0.7),
+                                xytext=(1.2 * x, 1.2 * y),
+                                horizontalalignment=horizontalalignment,
+                                arrowprops=dict(arrowstyle="-", connectionstyle=connectionstyle),
+                                fontsize=8,
+                                bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="gray", lw=0.5)
+                            )
+
                         ax.set_title(f"{selected_brand} Sales Distribution by Model ({year_range[0]}-{year_range[1]})")
+                        ax.set_ylabel("")
                     elif chart_type == 'Line Chart':
                         for model in filtered_df['Model'].unique():
                             line_df = filtered_df[filtered_df['Model'] == model].groupby('Year')['Units Sold (Millions)'].sum()
@@ -218,7 +191,6 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                     ax.text(0.5, 0.5, "No data or invalid data for selected brand's models in selected year range", ha='center', va='center', fontsize=14)
                     ax.axis('off')
             else:
-                # Single brand, aggregated (None)
                 grouped = filtered_df.groupby('Year')['Units Sold (Millions)'].sum()
                 if chart_type == 'Bar Chart':
                     bars = grouped.plot(kind='bar', ax=ax, color=color_map.get(selected_brand, 'gray'))
@@ -238,18 +210,14 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                 ax.set_ylabel("Units Sold (Millions)")
     return fig
 
-# Main content
 st.header("Smartphone Sales Visualizer 📱")
 
 if not compare_button:
-    # Display single chart
     with st.spinner("Rendering chart..."):
         fig, ax = plt.subplots(figsize=(10, 6))
         render_chart(selected_chart, selected_brand, selected_model, year_range, fig, ax)
         st.pyplot(fig)
-
 else:
-    # Display comparison charts
     if len(compare_charts) < 2:
         st.warning("Please select at least two charts to compare.")
     else:
@@ -266,7 +234,6 @@ else:
             plt.tight_layout()
             st.pyplot(fig)
 
-# Show statistics
 if show_stats:
     if selected_brand == 'All':
         st.warning("Select a single brand to see statistics.")
