@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+from matplotlib.widgets import Button
 
 # Streamlit page configuration
 st.set_page_config(page_title="Smartphone Sales Visualizer 📱", layout="wide")
@@ -92,7 +93,7 @@ show_stats = st.sidebar.button("Show Stats")
 # Function to render charts
 def render_chart(chart_type, selected_brand, selected_model, year_range, fig=None, ax=None, is_comparison=False):
     if ax is None:
-        ax = plt.gca()
+        fig, ax = plt.subplots(figsize=(12, 6))
 
     # Filter data by year range
     filtered_df = df[(df['Year'] >= year_range[0]) & (df['Year'] <= year_range[1])]
@@ -154,25 +155,75 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
             filtered_df = filtered_df[filtered_df['Brand'] == selected_brand]
             if selected_model == 'All':
                 grouped = filtered_df.groupby(['Model'])['Units Sold (Millions)'].sum()
-                top_n = 10  # Limit to top 10 models to avoid clutter
-                if len(grouped) > top_n:
-                    top_models = grouped.nlargest(top_n)
-                    others_sum = grouped[~grouped.index.isin(top_models.index)].sum()
-                    grouped = pd.concat([top_models, pd.Series({'Others': others_sum})])
                 if chart_type == 'Bar Chart':
-                    bars = grouped.plot(kind='bar', ax=ax, color=color_map.get(selected_brand, 'gray'))
-                    for bar in ax.patches:
-                        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), f'{bar.get_height():.1f}', 
-                                ha='center', va='bottom', fontsize=8)
+                    bars = ax.barh(grouped.index, grouped.values, color=color_map.get(selected_brand, 'gray'))
+                    for bar in bars:
+                        width = bar.get_width()
+                        ax.text(width, bar.get_y() + bar.get_height() / 2, f'{width:.1f}', 
+                                ha='left', va='center', fontsize=8)
                     ax.set_title(f"{selected_brand} Sales by Model ({year_range[0]}-{year_range[1]})")
-                    ax.set_xlabel("Model")
-                    plt.xticks(rotation=45, ha='right')
+                    ax.set_xlabel("Units Sold (Millions)")
+                    ax.set_ylabel("Model")
+                    # Enable scrollable and zoomable view
+                    plt.subplots_adjust(bottom=0.2)
+                    ax_zoom_in = plt.axes([0.7, 0.05, 0.1, 0.075])
+                    ax_zoom_out = plt.axes([0.81, 0.05, 0.1, 0.075])
+                    btn_zoom_in = Button(ax_zoom_in, 'Zoom In')
+                    btn_zoom_out = Button(ax_zoom_out, 'Zoom Out')
+                    scale = 1.0
+                    def zoom_in(event):
+                        nonlocal scale
+                        scale *= 1.2
+                        ax.set_xlim(0, ax.get_xlim()[1] * scale)
+                        fig.canvas.draw()
+                    def zoom_out(event):
+                        nonlocal scale
+                        scale /= 1.2
+                        ax.set_xlim(0, ax.get_xlim()[1] * scale)
+                        fig.canvas.draw()
+                    btn_zoom_in.on_clicked(zoom_in)
+                    btn_zoom_out.on_clicked(zoom_out)
                 elif chart_type == 'Pie Chart':
-                    grouped = grouped.sort_values(ascending=False)
-                    colors = [color_map.get(selected_brand, 'gray')] * len(grouped)
-                    ax.pie(grouped, labels=grouped.index, autopct='%1.1f%%', colors=colors, textprops={'fontsize': 8})
-                    ax.set_title(f"{selected_brand} Sales Distribution by Model ({year_range[0]}-{year_range[1]})")
+                    sizes = grouped.values
+                    labels = grouped.index
+                    colors = [color_map.get(selected_brand, 'gray')] * len(labels)
+                    # Calculate dynamic font size based on number of models
+                    num_models = len(labels)
+                    font_size = max(6, 12 / (num_models ** 0.5))  # Adjust font size inversely with sqrt of model count
+                    # Plot pie with percentages inside and labels outside
+                    ax.pie(sizes, labels=None, autopct=lambda pct: f'{pct:.1f}%' if pct > 2 else '', 
+                           colors=colors, textprops={'fontsize': font_size}, startangle=90)
                     ax.axis('equal')
+                    # Add model names outside sectors
+                    total = sum(sizes)
+                    for i, (label, size) in enumerate(zip(labels, sizes)):
+                        angle = (sum(sizes[:i]) + size / 2) * 360 / total
+                        angle_rad = np.deg2rad(angle)
+                        x = 1.2 * np.cos(angle_rad)
+                        y = 1.2 * np.sin(angle_rad)
+                        ax.text(x, y, label, ha='center', va='center', fontsize=font_size)
+                    ax.set_title(f"{selected_brand} Sales Distribution by Model ({year_range[0]}-{year_range[1]})")
+                    # Enable zoom buttons
+                    plt.subplots_adjust(bottom=0.2)
+                    ax_zoom_in = plt.axes([0.7, 0.05, 0.1, 0.075])
+                    ax_zoom_out = plt.axes([0.81, 0.05, 0.1, 0.075])
+                    btn_zoom_in = Button(ax_zoom_in, 'Zoom In')
+                    btn_zoom_out = Button(ax_zoom_out, 'Zoom Out')
+                    scale = 1.0
+                    def zoom_in(event):
+                        nonlocal scale
+                        scale *= 1.2
+                        ax.set_xlim(-scale, scale)
+                        ax.set_ylim(-scale, scale)
+                        fig.canvas.draw()
+                    def zoom_out(event):
+                        nonlocal scale
+                        scale /= 1.2
+                        ax.set_xlim(-scale, scale)
+                        ax.set_ylim(-scale, scale)
+                        fig.canvas.draw()
+                    btn_zoom_in.on_clicked(zoom_in)
+                    btn_zoom_out.on_clicked(zoom_out)
                 elif chart_type == 'Line Chart':
                     for model in grouped.index:
                         line_df = filtered_df[filtered_df['Model'] == model].groupby('Year')['Units Sold (Millions)'].sum()
@@ -207,11 +258,8 @@ st.header("Smartphone Sales Visualizer 📱")
 if not compare_button:
     # Display single chart
     with st.spinner("Rendering chart..."):
-        fig, ax = plt.subplots(figsize=(10, 6))
-        render_chart(selected_chart, selected_brand, selected_model, year_range, fig, ax)
-        plt.tight_layout()
+        fig = render_chart(selected_chart, selected_brand, selected_model, year_range)
         st.pyplot(fig)
-
 else:
     # Display comparison charts
     if len(compare_charts) < 2:
@@ -224,7 +272,7 @@ else:
             fig, axes = plt.subplots(rows, cols, figsize=(cols * 5, rows * 5))
             axes = np.array(axes).flatten() if n_charts > 1 else [axes]
             for idx, chart_type in enumerate(compare_charts):
-                render_chart(chart_type, selected_brand, selected_model, year_range, fig, axes[idx], is_comparison=True)
+                render_chart(chart_type, selected_brand, selected_model, year_range, fig=fig, ax=axes[idx], is_comparison=True)
             for idx in range(len(compare_charts), len(axes)):
                 axes[idx].axis('off')
             plt.tight_layout()
