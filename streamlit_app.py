@@ -163,8 +163,46 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                     ax.set_xlabel("Model")
                 elif chart_type == 'Pie Chart':
                     grouped = grouped.sort_values(ascending=False)
-                    grouped.plot(kind='pie', ax=ax, autopct='%1.1f%%', colors=[color_map.get(selected_brand, 'gray')])
-                    ax.set_ylabel("")
+                    wedges, texts, autotexts = ax.pie(grouped, labels=None, colors=[color_map.get(selected_brand, 'gray')], startangle=90)
+                    for i, (wedge, autotext) in enumerate(zip(wedges, autotexts)):
+                        # Get the angle of the wedge's midpoint
+                        angle = (wedge.theta2 + wedge.theta1) / 2
+                        # Normalize to 0-360 degrees
+                        angle = angle % 360
+                        # Determine text orientation
+                        if 45 <= angle < 135 or 225 <= angle < 315:  # Top and bottom (vertical)
+                            ha = 'center'
+                            va = 'center' if 45 <= angle < 135 else 'center'
+                            rotation = 90 if 45 <= angle < 135 else -90
+                        else:  # Left and right (horizontal)
+                            ha = 'left' if 0 <= angle < 180 else 'right'
+                            va = 'center'
+                            rotation = 0
+                        # Calculate position from center outward
+                        radius = wedge.r
+                        text_x = wedge.center[0] + radius * 0.3 * np.cos(np.radians(angle - 90))
+                        text_y = wedge.center[1] + radius * 0.3 * np.sin(np.radians(angle - 90))
+                        ax.text(text_x, text_y, f'{grouped.iloc[i]:.1f}', ha=ha, va=va, rotation=rotation, fontsize=8)
+                    # Move labels outward with hyphens
+                    for i, (wedge, label) in enumerate(zip(wedges, grouped.index)):
+                        angle = (wedge.theta2 + wedge.theta1) / 2
+                        angle = angle % 360
+                        radius = wedge.r
+                        label_x = wedge.center[0] + radius * 1.2 * np.cos(np.radians(angle - 90))
+                        label_y = wedge.center[1] + radius * 1.2 * np.sin(np.radians(angle - 90))
+                        if 45 <= angle < 135 or 225 <= angle < 315:  # Vertical
+                            ha = 'center'
+                            va = 'bottom' if 45 <= angle < 135 else 'top'
+                            rotation = 90 if 45 <= angle < 135 else -90
+                        else:  # Horizontal
+                            ha = 'left' if 0 <= angle < 180 else 'right'
+                            va = 'center'
+                            rotation = 0
+                        ax.text(label_x, label_y, f'{label}', ha=ha, va=va, rotation=rotation, fontsize=8)
+                        # Add hyphen connector
+                        mid_x = wedge.center[0] + radius * 0.6 * np.cos(np.radians(angle - 90))
+                        mid_y = wedge.center[1] + radius * 0.6 * np.sin(np.radians(angle - 90))
+                        ax.plot([mid_x, label_x], [mid_y, label_y], color='gray', linestyle='-', linewidth=0.5)
                     ax.set_title(f"{selected_brand} Sales Distribution by Model ({year_range[0]}-{year_range[1]})")
                 elif chart_type == 'Line Chart':
                     for model in filtered_df['Model'].unique():
