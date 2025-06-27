@@ -48,6 +48,7 @@ def load_data(file_url=None, uploaded_file=None):
     # Clean data
     df['Year'] = df['Year'].astype(int)
     df['Model'] = df['Model'].fillna('Unknown')
+    df['Units Sold (Millions)'] = pd.to_numeric(df['Units Sold (Millions)'], errors='coerce').fillna(0)
     return df
 
 # GitHub raw CSV URL (replace with your actual GitHub raw URL)
@@ -154,7 +155,7 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
             filtered_df = filtered_df[filtered_df['Brand'] == selected_brand]
             if selected_model == 'All':
                 grouped = filtered_df.groupby(['Model'])['Units Sold (Millions)'].sum()
-                if not grouped.empty:
+                if not grouped.empty and grouped.notna().all():
                     if chart_type == 'Bar Chart':
                         bars = grouped.plot(kind='bar', ax=ax, color=color_map.get(selected_brand, 'gray'))
                         for bar in ax.patches:
@@ -164,7 +165,9 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                         ax.set_xlabel("Model")
                     elif chart_type == 'Pie Chart':
                         grouped = grouped.sort_values(ascending=False)
-                        wedges, texts, autotexts = ax.pie(grouped, labels=None, colors=[color_map.get(selected_brand, 'gray')] * len(grouped), startangle=90)
+                        # Ensure colors match the number of wedges
+                        wedge_colors = [color_map.get(selected_brand, 'gray')] * len(grouped)
+                        wedges, texts, autotexts = ax.pie(grouped, labels=None, colors=wedge_colors, startangle=90)
                         for i, (wedge, autotext) in enumerate(zip(wedges, autotexts)):
                             # Get the angle of the wedge's midpoint
                             angle = (wedge.theta2 + wedge.theta1) / 2
@@ -213,7 +216,7 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                         ax.legend()
                     ax.set_ylabel("Units Sold (Millions)")
                 else:
-                    ax.text(0.5, 0.5, "No data for selected brand's models in selected year range", ha='center', va='center', fontsize=14)
+                    ax.text(0.5, 0.5, "No data or invalid data for selected brand's models in selected year range", ha='center', va='center', fontsize=14)
                     ax.axis('off')
             else:
                 # Single brand, aggregated (None)
