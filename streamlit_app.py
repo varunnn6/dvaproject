@@ -70,7 +70,7 @@ selected_brand = st.sidebar.selectbox("Select Brand", brands, index=brands.index
 if selected_brand == 'All':
     models = ['None']
 else:
-    models = sorted(['None'] + df[df['Brand'] == selected_brand]['Model'].unique().tolist())
+    models = sorted(['All', 'None'] + df[df['Brand'] == selected_brand]['Model'].unique().tolist())
 selected_model = st.sidebar.selectbox("Select Model", models, index=0)
 
 # Year range selection
@@ -102,7 +102,7 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
         sns.heatmap(pivot, annot=True, fmt=".1f", cmap='coolwarm', ax=ax, cbar=True)
         ax.set_title("Heatmap: Smartphone Sales")
     else:
-        if selected_model and selected_model != 'None' and selected_brand != 'All':
+        if selected_model and selected_model not in ['None', 'All'] and selected_brand != 'All':
             filtered_df = filtered_df[(filtered_df['Brand'] == selected_brand) & (filtered_df['Model'] == selected_model)]
             if not filtered_df.empty:
                 data = filtered_df['Units Sold (Millions)']
@@ -148,18 +148,20 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                 ax.legend()
             ax.set_ylabel("Units Sold (Millions)")
         else:
-            grouped = filtered_df[filtered_df['Brand'] == selected_brand].groupby('Year')['Units Sold (Millions)'].sum()
+            # Handle case where selected_model is 'All' or 'None'
+            filtered_df = filtered_df[filtered_df['Brand'] == selected_brand]
+            grouped = filtered_df.groupby('Year')['Units Sold (Millions)'].sum()
             if chart_type == 'Bar Chart':
                 bars = grouped.plot(kind='bar', ax=ax, color=color_map.get(selected_brand, 'gray'))
                 for bar in ax.patches:
                     ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), f'{bar.get_height():.1f}',
                             ha='center', va='bottom', fontsize=8)
-                ax.set_title(f"{selected_brand} Sales ({year_range[0]}-{year_range[1]})")
+                ax.set_title(f"{selected_brand} Total Sales ({year_range[0]}-{year_range[1]})")
             elif chart_type == 'Line Chart':
                 grouped.plot(kind='line', ax=ax, marker='o', color=color_map.get(selected_brand, 'gray'))
                 for x, y in zip(grouped.index, grouped.values):
                     ax.text(x, y, f'{y:.1f}', ha='center', va='bottom', fontsize=8)
-                ax.set_title(f"{selected_brand} Sales ({year_range[0]}-{year_range[1]})")
+                ax.set_title(f"{selected_brand} Total Sales ({year_range[0]}-{year_range[1]})")
             elif chart_type == 'Pie Chart':
                 ax.text(0.5, 0.5, "Pie chart not applicable for single brand", ha='center', va='center', fontsize=14)
                 ax.axis('off')
@@ -201,9 +203,10 @@ if show_stats:
         st.warning("Select a single brand to see statistics.")
     else:
         filtered_df = df[(df['Year'] >= year_range[0]) & (df['Year'] <= year_range[1])]
-        filtered_df = filtered_df[filtered_df['Brand'] == selected_brand] if selected_model == 'None' else \
-                     filtered_df[(filtered_df['Brand'] == selected_brand) & (filtered_df['Model'] == selected_model)]
-        model_text = 'All Models' if selected_model == 'None' else selected_model
+        filtered_df = filtered_df[filtered_df['Brand'] == selected_brand]
+        if selected_model not in ['All', 'None']:
+            filtered_df = filtered_df[filtered_df['Model'] == selected_model]
+        model_text = 'All Models' if selected_model in ['All', 'None'] else selected_model
         brand_data = filtered_df['Units Sold (Millions)']
         if brand_data.empty:
             st.warning(f"No data available for {selected_brand} ({model_text}) in the selected year range.")
