@@ -103,6 +103,7 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
         ax.set_title("Heatmap: Smartphone Sales")
     else:
         if selected_model and selected_model not in ['None', 'All'] and selected_brand != 'All':
+            # Single model for a specific brand
             filtered_df = filtered_df[(filtered_df['Brand'] == selected_brand) & (filtered_df['Model'] == selected_model)]
             if not filtered_df.empty:
                 data = filtered_df['Units Sold (Millions)']
@@ -112,12 +113,12 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                     for bar in bars:
                         ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), f'{bar.get_height():.1f}', 
                                 ha='center', va='bottom', fontsize=8)
-                    ax.set_title(f"{selected_model} Sales ({year_range[0]}-{year_range[1]})")
+                    ax.set_title(f"{selected_brand} {selected_model} Sales ({year_range[0]}-{year_range[1]})")
                 elif chart_type == 'Line Chart':
                     ax.plot(years, data, marker='o', color=color_map.get(selected_brand, 'gray'))
                     for x, y in zip(years, data):
                         ax.text(x, y, f'{y:.1f}', ha='center', va='bottom', fontsize=8)
-                    ax.set_title(f"{selected_model} Sales ({year_range[0]}-{year_range[1]})")
+                    ax.set_title(f"{selected_brand} {selected_model} Sales ({year_range[0]}-{year_range[1]})")
                 elif chart_type == 'Pie Chart':
                     ax.text(0.5, 0.5, "Pie chart not applicable for single model", ha='center', va='center', fontsize=14)
                     ax.axis('off')
@@ -127,6 +128,7 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                 ax.text(0.5, 0.5, "No data for selected model in selected year range", ha='center', va='center', fontsize=14)
                 ax.axis('off')
         elif selected_brand == 'All':
+            # All brands
             grouped = filtered_df.groupby(['Brand'])['Units Sold (Millions)'].sum().reindex(color_map.keys(), fill_value=0)
             if chart_type == 'Bar Chart':
                 bars = grouped.plot(kind='bar', ax=ax, color=[color_map.get(b, 'gray') for b in grouped.index])
@@ -148,25 +150,48 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                 ax.legend()
             ax.set_ylabel("Units Sold (Millions)")
         else:
-            # Handle case where selected_model is 'All' or 'None'
+            # Single brand, all models
             filtered_df = filtered_df[filtered_df['Brand'] == selected_brand]
-            grouped = filtered_df.groupby('Year')['Units Sold (Millions)'].sum()
-            if chart_type == 'Bar Chart':
-                bars = grouped.plot(kind='bar', ax=ax, color=color_map.get(selected_brand, 'gray'))
-                for bar in ax.patches:
-                    ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), f'{bar.get_height():.1f}',
-                            ha='center', va='bottom', fontsize=8)
-                ax.set_title(f"{selected_brand} Total Sales ({year_range[0]}-{year_range[1]})")
-            elif chart_type == 'Line Chart':
-                grouped.plot(kind='line', ax=ax, marker='o', color=color_map.get(selected_brand, 'gray'))
-                for x, y in zip(grouped.index, grouped.values):
-                    ax.text(x, y, f'{y:.1f}', ha='center', va='bottom', fontsize=8)
-                ax.set_title(f"{selected_brand} Total Sales ({year_range[0]}-{year_range[1]})")
-            elif chart_type == 'Pie Chart':
-                ax.text(0.5, 0.5, "Pie chart not applicable for single brand", ha='center', va='center', fontsize=14)
-                ax.axis('off')
-            ax.set_xlabel("Year")
-            ax.set_ylabel("Units Sold (Millions)")
+            if selected_model == 'All':
+                grouped = filtered_df.groupby(['Model'])['Units Sold (Millions)'].sum()
+                if chart_type == 'Bar Chart':
+                    bars = grouped.plot(kind='bar', ax=ax, color=color_map.get(selected_brand, 'gray'))
+                    for bar in ax.patches:
+                        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), f'{bar.get_height():.1f}', 
+                                ha='center', va='bottom', fontsize=8)
+                    ax.set_title(f"{selected_brand} Sales by Model ({year_range[0]}-{year_range[1]})")
+                    ax.set_xlabel("Model")
+                elif chart_type == 'Pie Chart':
+                    grouped = grouped.sort_values(ascending=False)
+                    grouped.plot(kind='pie', ax=ax, autopct='%1.1f%%', colors=[color_map.get(selected_brand, 'gray')])
+                    ax.set_ylabel("")
+                    ax.set_title(f"{selected_brand} Sales Distribution by Model ({year_range[0]}-{year_range[1]})")
+                elif chart_type == 'Line Chart':
+                    for model in filtered_df['Model'].unique():
+                        line_df = filtered_df[filtered_df['Model'] == model].groupby('Year')['Units Sold (Millions)'].sum()
+                        ax.plot(line_df.index, line_df.values, label=model, color=color_map.get(selected_brand, 'gray'))
+                    ax.set_title(f"{selected_brand} Sales Trends by Model ({year_range[0]}-{year_range[1]})")
+                    ax.legend()
+                ax.set_ylabel("Units Sold (Millions)")
+            else:
+                # Single brand, aggregated (None)
+                grouped = filtered_df.groupby('Year')['Units Sold (Millions)'].sum()
+                if chart_type == 'Bar Chart':
+                    bars = grouped.plot(kind='bar', ax=ax, color=color_map.get(selected_brand, 'gray'))
+                    for bar in ax.patches:
+                        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), f'{bar.get_height():.1f}',
+                                ha='center', va='bottom', fontsize=8)
+                    ax.set_title(f"{selected_brand} Total Sales ({year_range[0]}-{year_range[1]})")
+                elif chart_type == 'Line Chart':
+                    grouped.plot(kind='line', ax=ax, marker='o', color=color_map.get(selected_brand, 'gray'))
+                    for x, y in zip(grouped.index, grouped.values):
+                        ax.text(x, y, f'{y:.1f}', ha='center', va='bottom', fontsize=8)
+                    ax.set_title(f"{selected_brand} Total Sales ({year_range[0]}-{year_range[1]})")
+                elif chart_type == 'Pie Chart':
+                    ax.text(0.5, 0.5, "Pie chart not applicable for aggregated brand data", ha='center', va='center', fontsize=14)
+                    ax.axis('off')
+                ax.set_xlabel("Year")
+                ax.set_ylabel("Units Sold (Millions)")
     return fig
 
 # Main content
