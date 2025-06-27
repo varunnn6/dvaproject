@@ -18,7 +18,7 @@ color_map = {
     'Apple': '#B565A7'
 }
 
-# Load CSV from GitHub or uploaded file
+# Load CSV
 @st.cache_data
 def load_data(file_url=None, uploaded_file=None):
     try:
@@ -39,42 +39,35 @@ def load_data(file_url=None, uploaded_file=None):
         st.error(f"Error loading file: {e}")
         return None
 
-    # Validate required columns
     required_columns = {'Year', 'Brand', 'Model', 'Units Sold (Millions)'}
     if not required_columns.issubset(df.columns):
         st.error(f"Missing required columns. Found: {list(df.columns)}")
         return None
 
-    # Clean data
     df['Year'] = df['Year'].astype(int)
     df['Model'] = df['Model'].fillna('Unknown')
     df['Units Sold (Millions)'] = pd.to_numeric(df['Units Sold (Millions)'], errors='coerce').fillna(0)
     return df
 
-# GitHub raw CSV URL (replace with your actual GitHub raw URL)
+# Github csv url
 github_csv_url = "https://raw.githubusercontent.com/varunnn6/dvaproject/main/smartphone_sales2.csv"
 
-# File uploader as fallback
 uploaded_file = st.sidebar.file_uploader("Upload CSV file (optional)", type=["csv"])
-
-# Load data
 df = load_data(file_url=github_csv_url, uploaded_file=uploaded_file)
 if df is None:
     st.stop()
 
-# Sidebar for user inputs
+# sidebar
 st.sidebar.header("Smartphone Sales Visualizer 📱")
 brands = sorted(df['Brand'].unique().tolist() + ['All'])
 selected_brand = st.sidebar.selectbox("Select Brand", brands, index=brands.index('All'))
 
-# Update model options based on selected brand
 if selected_brand == 'All':
     models = ['None']
 else:
     models = sorted(['All', 'None'] + df[df['Brand'] == selected_brand]['Model'].unique().tolist())
-selected_model = st.sidebar.selectbox("Select Model", models, index=0)
 
-# Year range selection
+selected_model = st.sidebar.selectbox("Select Model", models, index=0)
 min_year = int(df['Year'].min())
 max_year = int(df['Year'].max())
 year_range = st.sidebar.slider("Select Year Range", min_year, max_year, (min_year, max_year))
@@ -82,15 +75,13 @@ year_range = st.sidebar.slider("Select Year Range", min_year, max_year, (min_yea
 chart_types = ['Bar Chart', 'Pie Chart', 'Line Chart', 'Heatmap']
 selected_chart = st.sidebar.selectbox("Select Chart Type", chart_types)
 
-# Comparison charts
 st.sidebar.subheader("Compare Charts")
 compare_charts = st.sidebar.multiselect("Select Charts to Compare", chart_types)
 compare_button = st.sidebar.button("Compare Charts")
-
-# Show stats button
 show_stats = st.sidebar.button("Show Stats")
 
-# Chart rendering
+
+# chart rendering
 def render_chart(chart_type, selected_brand, selected_model, year_range, fig=None, ax=None, is_comparison=False):
     if ax is None:
         ax = plt.gca()
@@ -103,7 +94,6 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
         ax.set_title("Heatmap: Smartphone Sales")
     else:
         if selected_model and selected_model not in ['None', 'All'] and selected_brand != 'All':
-            # single model
             filtered_df = filtered_df[(filtered_df['Brand'] == selected_brand) & (filtered_df['Model'] == selected_model)]
             if not filtered_df.empty:
                 data = filtered_df['Units Sold (Millions)']
@@ -119,12 +109,12 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                         ax.text(x, y, f"{y:.1f}", ha="center", va="bottom", fontsize=8)
                     ax.set_title(f"{selected_brand} {selected_model} Sales ({year_range[0]}-{year_range[1]})")
                 elif chart_type == 'Pie Chart':
-                    ax.text(0.5, 0.5, "Pie chart not applicable for single model", ha='center', va='center', fontsize=12)
+                    ax.text(0.5, 0.5, "Pie chart not applicable for single model", ha='center', va='center')
                     ax.axis('off')
                 ax.set_xlabel("Year")
                 ax.set_ylabel("Units Sold (Millions)")
             else:
-                ax.text(0.5, 0.5, "No data found", ha='center', va='center', fontsize=12)
+                ax.text(0.5, 0.5, "No data found", ha='center', va='center')
                 ax.axis('off')
         elif selected_brand == 'All':
             grouped = filtered_df.groupby('Brand')['Units Sold (Millions)'].sum().reindex(color_map.keys(), fill_value=0)
@@ -145,7 +135,6 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                 ax.set_title(f"Sales Trends by Brand ({year_range[0]}-{year_range[1]})")
             ax.set_ylabel("Units Sold (Millions)")
         else:
-            # single brand, all models
             filtered_df = filtered_df[filtered_df['Brand'] == selected_brand]
             if selected_model == 'All':
                 grouped = filtered_df.groupby('Model')['Units Sold (Millions)'].sum()
@@ -155,12 +144,11 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                         labels = grouped.index
                         values = grouped.values
                         colors = plt.cm.tab20.colors * (len(values) // 20 + 1)
-                        wedges, texts, autotexts = ax.pie(
+                        wedges, texts = ax.pie(
                             values,
                             labels=None,
                             startangle=90,
                             colors=colors[:len(values)],
-                            autopct=None,
                             wedgeprops=dict(width=1, edgecolor='w')
                         )
                         for i, wedge in enumerate(wedges):
@@ -193,13 +181,13 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                         ax.set_title(f"{selected_brand} Sales Trends by Model ({year_range[0]}-{year_range[1]})")
                     ax.set_ylabel("Units Sold (Millions)")
                 else:
-                    ax.text(0.5, 0.5, "No data for this brand in this range", ha='center', va='center')
+                    ax.text(0.5, 0.5, "No data found", ha='center', va='center')
                     ax.axis('off')
     return fig
 
-# Main content
-st.header("Smartphone Sales Visualizer 📱")
 
+# main
+st.header("Smartphone Sales Visualizer 📱")
 if not compare_button:
     with st.spinner("Rendering chart..."):
         fig, ax = plt.subplots(figsize=(10,6))
@@ -220,7 +208,7 @@ else:
         plt.tight_layout()
         st.pyplot(fig)
 
-# Show statistics
+# statistics
 if show_stats:
     if selected_brand == 'All':
         st.warning("Select a single brand to see statistics.")
