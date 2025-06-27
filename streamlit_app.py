@@ -154,63 +154,67 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
             filtered_df = filtered_df[filtered_df['Brand'] == selected_brand]
             if selected_model == 'All':
                 grouped = filtered_df.groupby(['Model'])['Units Sold (Millions)'].sum()
-                if chart_type == 'Bar Chart':
-                    bars = grouped.plot(kind='bar', ax=ax, color=color_map.get(selected_brand, 'gray'))
-                    for bar in ax.patches:
-                        ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), f'{bar.get_height():.1f}', 
-                                ha='center', va='bottom', fontsize=8)
-                    ax.set_title(f"{selected_brand} Sales by Model ({year_range[0]}-{year_range[1]})")
-                    ax.set_xlabel("Model")
-                elif chart_type == 'Pie Chart':
-                    grouped = grouped.sort_values(ascending=False)
-                    wedges, texts, autotexts = ax.pie(grouped, labels=None, colors=[color_map.get(selected_brand, 'gray')], startangle=90)
-                    for i, (wedge, autotext) in enumerate(zip(wedges, autotexts)):
-                        # Get the angle of the wedge's midpoint
-                        angle = (wedge.theta2 + wedge.theta1) / 2
-                        # Normalize to 0-360 degrees
-                        angle = angle % 360
-                        # Determine text orientation
-                        if 45 <= angle < 135 or 225 <= angle < 315:  # Top and bottom (vertical)
-                            ha = 'center'
-                            va = 'center' if 45 <= angle < 135 else 'center'
-                            rotation = 90 if 45 <= angle < 135 else -90
-                        else:  # Left and right (horizontal)
-                            ha = 'left' if 0 <= angle < 180 else 'right'
-                            va = 'center'
-                            rotation = 0
-                        # Calculate position from center outward
-                        radius = wedge.r
-                        text_x = wedge.center[0] + radius * 0.3 * np.cos(np.radians(angle - 90))
-                        text_y = wedge.center[1] + radius * 0.3 * np.sin(np.radians(angle - 90))
-                        ax.text(text_x, text_y, f'{grouped.iloc[i]:.1f}', ha=ha, va=va, rotation=rotation, fontsize=8)
-                    # Move labels outward with hyphens
-                    for i, (wedge, label) in enumerate(zip(wedges, grouped.index)):
-                        angle = (wedge.theta2 + wedge.theta1) / 2
-                        angle = angle % 360
-                        radius = wedge.r
-                        label_x = wedge.center[0] + radius * 1.2 * np.cos(np.radians(angle - 90))
-                        label_y = wedge.center[1] + radius * 1.2 * np.sin(np.radians(angle - 90))
-                        if 45 <= angle < 135 or 225 <= angle < 315:  # Vertical
-                            ha = 'center'
-                            va = 'bottom' if 45 <= angle < 135 else 'top'
-                            rotation = 90 if 45 <= angle < 135 else -90
-                        else:  # Horizontal
-                            ha = 'left' if 0 <= angle < 180 else 'right'
-                            va = 'center'
-                            rotation = 0
-                        ax.text(label_x, label_y, f'{label}', ha=ha, va=va, rotation=rotation, fontsize=8)
-                        # Add hyphen connector
-                        mid_x = wedge.center[0] + radius * 0.6 * np.cos(np.radians(angle - 90))
-                        mid_y = wedge.center[1] + radius * 0.6 * np.sin(np.radians(angle - 90))
-                        ax.plot([mid_x, label_x], [mid_y, label_y], color='gray', linestyle='-', linewidth=0.5)
-                    ax.set_title(f"{selected_brand} Sales Distribution by Model ({year_range[0]}-{year_range[1]})")
-                elif chart_type == 'Line Chart':
-                    for model in filtered_df['Model'].unique():
-                        line_df = filtered_df[filtered_df['Model'] == model].groupby('Year')['Units Sold (Millions)'].sum()
-                        ax.plot(line_df.index, line_df.values, label=model, color=color_map.get(selected_brand, 'gray'))
-                    ax.set_title(f"{selected_brand} Sales Trends by Model ({year_range[0]}-{year_range[1]})")
-                    ax.legend()
-                ax.set_ylabel("Units Sold (Millions)")
+                if not grouped.empty:
+                    if chart_type == 'Bar Chart':
+                        bars = grouped.plot(kind='bar', ax=ax, color=color_map.get(selected_brand, 'gray'))
+                        for bar in ax.patches:
+                            ax.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), f'{bar.get_height():.1f}', 
+                                    ha='center', va='bottom', fontsize=8)
+                        ax.set_title(f"{selected_brand} Sales by Model ({year_range[0]}-{year_range[1]})")
+                        ax.set_xlabel("Model")
+                    elif chart_type == 'Pie Chart':
+                        grouped = grouped.sort_values(ascending=False)
+                        wedges, texts, autotexts = ax.pie(grouped, labels=None, colors=[color_map.get(selected_brand, 'gray')] * len(grouped), startangle=90)
+                        for i, (wedge, autotext) in enumerate(zip(wedges, autotexts)):
+                            # Get the angle of the wedge's midpoint
+                            angle = (wedge.theta2 + wedge.theta1) / 2
+                            # Normalize to 0-360 degrees
+                            angle = angle % 360
+                            # Determine text orientation
+                            if 45 <= angle < 135 or 225 <= angle < 315:  # Top and bottom (vertical)
+                                ha = 'center'
+                                va = 'center' if 45 <= angle < 135 else 'center'
+                                rotation = 90 if 45 <= angle < 135 else -90
+                            else:  # Left and right (horizontal)
+                                ha = 'left' if 0 <= angle < 180 else 'right'
+                                va = 'center'
+                                rotation = 0
+                            # Calculate position from center outward
+                            radius = wedge.r
+                            text_x = wedge.center[0] + radius * 0.3 * np.cos(np.radians(angle - 90))
+                            text_y = wedge.center[1] + radius * 0.3 * np.sin(np.radians(angle - 90))
+                            ax.text(text_x, text_y, f'{grouped.iloc[i]:.1f}', ha=ha, va=va, rotation=rotation, fontsize=8)
+                        # Move labels outward with hyphens
+                        for i, (wedge, label) in enumerate(zip(wedges, grouped.index)):
+                            angle = (wedge.theta2 + wedge.theta1) / 2
+                            angle = angle % 360
+                            radius = wedge.r
+                            label_x = wedge.center[0] + radius * 1.2 * np.cos(np.radians(angle - 90))
+                            label_y = wedge.center[1] + radius * 1.2 * np.sin(np.radians(angle - 90))
+                            if 45 <= angle < 135 or 225 <= angle < 315:  # Vertical
+                                ha = 'center'
+                                va = 'bottom' if 45 <= angle < 135 else 'top'
+                                rotation = 90 if 45 <= angle < 135 else -90
+                            else:  # Horizontal
+                                ha = 'left' if 0 <= angle < 180 else 'right'
+                                va = 'center'
+                                rotation = 0
+                            ax.text(label_x, label_y, f'{label}', ha=ha, va=va, rotation=rotation, fontsize=8)
+                            # Add hyphen connector
+                            mid_x = wedge.center[0] + radius * 0.6 * np.cos(np.radians(angle - 90))
+                            mid_y = wedge.center[1] + radius * 0.6 * np.sin(np.radians(angle - 90))
+                            ax.plot([mid_x, label_x], [mid_y, label_y], color='gray', linestyle='-', linewidth=0.5)
+                        ax.set_title(f"{selected_brand} Sales Distribution by Model ({year_range[0]}-{year_range[1]})")
+                    elif chart_type == 'Line Chart':
+                        for model in filtered_df['Model'].unique():
+                            line_df = filtered_df[filtered_df['Model'] == model].groupby('Year')['Units Sold (Millions)'].sum()
+                            ax.plot(line_df.index, line_df.values, label=model, color=color_map.get(selected_brand, 'gray'))
+                        ax.set_title(f"{selected_brand} Sales Trends by Model ({year_range[0]}-{year_range[1]})")
+                        ax.legend()
+                    ax.set_ylabel("Units Sold (Millions)")
+                else:
+                    ax.text(0.5, 0.5, "No data for selected brand's models in selected year range", ha='center', va='center', fontsize=14)
+                    ax.axis('off')
             else:
                 # Single brand, aggregated (None)
                 grouped = filtered_df.groupby('Year')['Units Sold (Millions)'].sum()
