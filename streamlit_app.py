@@ -147,13 +147,18 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                     line_df = filtered_df[filtered_df['Brand'] == brand].groupby('Year')['Units Sold (Millions)'].sum()
                     ax.plot(line_df.index, line_df.values, label=brand, color=color_map.get(brand, 'gray'))
                 ax.set_title(f"Total Sales Trends by Brand ({year_range[0]}-{year_range[1]})")
-                ax.legend()
+                ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=8)
             ax.set_ylabel("Units Sold (Millions)")
         else:
             # Single brand, all models
             filtered_df = filtered_df[filtered_df['Brand'] == selected_brand]
             if selected_model == 'All':
                 grouped = filtered_df.groupby(['Model'])['Units Sold (Millions)'].sum()
+                top_n = 10  # Limit to top 10 models to avoid clutter
+                if len(grouped) > top_n:
+                    top_models = grouped.nlargest(top_n)
+                    others_sum = grouped[~grouped.index.isin(top_models.index)].sum()
+                    grouped = pd.concat([top_models, pd.Series({'Others': others_sum})])
                 if chart_type == 'Bar Chart':
                     bars = grouped.plot(kind='bar', ax=ax, color=color_map.get(selected_brand, 'gray'))
                     for bar in ax.patches:
@@ -161,17 +166,19 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                                 ha='center', va='bottom', fontsize=8)
                     ax.set_title(f"{selected_brand} Sales by Model ({year_range[0]}-{year_range[1]})")
                     ax.set_xlabel("Model")
+                    plt.xticks(rotation=45, ha='right')
                 elif chart_type == 'Pie Chart':
                     grouped = grouped.sort_values(ascending=False)
-                    grouped.plot(kind='pie', ax=ax, autopct='%1.1f%%', colors=[color_map.get(selected_brand, 'gray')])
-                    ax.set_ylabel("")
+                    colors = [color_map.get(selected_brand, 'gray')] * len(grouped)
+                    ax.pie(grouped, labels=grouped.index, autopct='%1.1f%%', colors=colors, textprops={'fontsize': 8})
                     ax.set_title(f"{selected_brand} Sales Distribution by Model ({year_range[0]}-{year_range[1]})")
+                    ax.axis('equal')
                 elif chart_type == 'Line Chart':
-                    for model in filtered_df['Model'].unique():
+                    for model in grouped.index:
                         line_df = filtered_df[filtered_df['Model'] == model].groupby('Year')['Units Sold (Millions)'].sum()
-                        ax.plot(line_df.index, line_df.values, label=model, color=color_map.get(selected_brand, 'gray'))
+                        ax.plot(line_df.index, line_df.values, label=model, color=color_map.get(selected_brand, 'gray'), linewidth=1)
                     ax.set_title(f"{selected_brand} Sales Trends by Model ({year_range[0]}-{year_range[1]})")
-                    ax.legend()
+                    ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=6, ncol=1)
                 ax.set_ylabel("Units Sold (Millions)")
             else:
                 # Single brand, aggregated (None)
@@ -202,6 +209,7 @@ if not compare_button:
     with st.spinner("Rendering chart..."):
         fig, ax = plt.subplots(figsize=(10, 6))
         render_chart(selected_chart, selected_brand, selected_model, year_range, fig, ax)
+        plt.tight_layout()
         st.pyplot(fig)
 
 else:
