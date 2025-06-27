@@ -152,9 +152,9 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                         grouped = grouped.sort_values(ascending=False)
                         values = grouped.values
                         labels = grouped.index
-                        colors = plt.cm.tab20.colors  # more distinct colors
+                        colors = plt.cm.tab20.colors
 
-                        wedges, texts, autotexts = ax.pie(
+                        wedges, texts = ax.pie(
                             values,
                             colors=colors[:len(values)],
                             startangle=90,
@@ -177,7 +177,6 @@ def render_chart(chart_type, selected_brand, selected_model, year_range, fig=Non
                                 fontsize=8,
                                 bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="gray", lw=0.5)
                             )
-
                         ax.set_title(f"{selected_brand} Sales Distribution by Model ({year_range[0]}-{year_range[1]})")
                         ax.set_ylabel("")
                     elif chart_type == 'Line Chart':
